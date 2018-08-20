@@ -9,8 +9,10 @@
 #import "ViewController.h"
 #import "DLSlider.h"
 @interface ViewController ()<DLSliderDelegate>
-@property (nonatomic, strong) UITextView *text;
 
+@property (nonatomic, strong) UITextView *text;
+@property (nonatomic, assign) NSInteger selectIndex1;
+@property (nonatomic, assign) NSInteger selectIndex2;
 
 @end
 
@@ -41,6 +43,8 @@
     [changeColor setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     [self.view addSubview:changeColor];
     
+    _selectIndex1 = 1;
+    _selectIndex2 = 1;
 }
 
 - (void)changeAction:(UIButton *)sender {
@@ -50,7 +54,7 @@
     slider.delegate = self;
     slider.stepNum = sender.tag == 101 ? 6 : 7;
     slider.lineColor = [UIColor darkGrayColor];
-    
+    slider.defaultIndex = sender.tag == 101 ? _selectIndex1 : _selectIndex2;
     //若实现了相关代理，这两个属性的设置会被覆盖。
     slider.titleFont = [UIFont systemFontOfSize:16];
     slider.titleColor = [UIColor cyanColor];
@@ -71,12 +75,20 @@
         default:
             break;
     }
-    
-    
 }
 
 - (void)didSelectItemWithIndex:(NSInteger)index withMark:(NSInteger)mark{
     NSLog(@"已经选择第%ld个item",index);
+    switch (mark) {
+        case 101:
+            _selectIndex1 = index;
+            break;
+        case 102:
+            _selectIndex2 = index;
+            break;
+        default:
+            break;
+    }
 }
 
 - (NSString *)titleAtIndex:(NSInteger)index withMark:(NSInteger)mark{
@@ -91,7 +103,6 @@
             return @"";
             break;
     }
-    
 }
 
 //滑尺没个item的名字
