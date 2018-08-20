@@ -1,9 +1,9 @@
 //
 //  AppDelegate.m
-//  DLStepSlider
+//  DLSlider
 //
-//  Created by Qianyuanhengye on 2018/3/16.
-//  Copyright © 2018年 Qianyuanhengye. All rights reserved.
+//  Created by qyhy on 2018/8/20.
+//  Copyright © 2018年 QYhengye. All rights reserved.
 //
 
 #import "AppDelegate.h"

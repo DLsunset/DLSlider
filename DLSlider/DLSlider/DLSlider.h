@@ -1,27 +1,32 @@
 //
-//  DLStepSlider.h
+//  DLSlider.h
 //  html
 //
-//  Created by Qianyuanhengye on 2018/3/16.
-//  Copyright © 2018年 Qianyuanhengye. All rights reserved.
+//  Created by DongLei on 2018/3/16.
+//  Copyright © 2018年 DongLei All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@protocol  DLStepSliderDelegate <NSObject>
+@protocol  DLSliderDelegate <NSObject>
 
 @optional
 
-- (void)willSelectItemWithIndex:(NSInteger )index;
-- (void)didSelectItemWithIndex:(NSInteger )index;
-- (UIFont *)titleFontAtIndex:(NSInteger )index;
-- (UIColor *)titleColorAtIndex:(NSInteger )index;
-- (NSString *)titleAtIndex:(NSInteger )index;
+- (void)willSelectItemWithIndex:(NSInteger )index withMark:(NSInteger)mark;
+- (void)didSelectItemWithIndex:(NSInteger )index withMark:(NSInteger)mark;
+- (UIFont *)titleFontAtIndex:(NSInteger )index withMark:(NSInteger)mark;
+- (UIColor *)titleColorAtIndex:(NSInteger )index withMark:(NSInteger)mark;
+- (NSString *)titleAtIndex:(NSInteger )index withMark:(NSInteger)mark;
 
 @end
 
-@interface DLStepSlider : UIViewController
+@interface DLSlider : UIViewController
 
+
+/**
+ 用于在同一个页面有多处需要使用DLSlider时进行记号区分。
+ */
+@property (nonatomic, assign) NSInteger mark;
 /**
  可调整级数，默认为4, 推荐数值(2 ~ 7),理论可超过7，但过于拥挤
  */
@@ -50,9 +55,9 @@
 /**
  当前位置
  */
-@property (nonatomic, assign) NSInteger currentIndex;
+@property (nonatomic, assign, readonly) NSInteger currentIndex;
 
-@property (nonatomic, weak) id <DLStepSliderDelegate>delegate;
+@property (nonatomic, weak) id <DLSliderDelegate>delegate;
 
 @end
 

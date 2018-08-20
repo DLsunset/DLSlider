@@ -1,17 +1,17 @@
 //
-//  DLStepSlider.m
+//  DLSlider.m
 //  html
 //
-//  Created by Qianyuanhengye on 2018/3/16.
-//  Copyright © 2018年 Qianyuanhengye. All rights reserved.
+//  Created by DongLei on 2018/3/16.
+//  Copyright © 2018年 DongLei All rights reserved.
 //
 
-#import "DLStepSlider.h"
+#import "DLSlider.h"
 
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 #define SCREEN_HEIGTH [UIScreen mainScreen].bounds.size.height
 
-@interface DLStepSlider ()<UIViewControllerTransitioningDelegate>
+@interface DLSlider ()<UIViewControllerTransitioningDelegate>
 
 @property (nonatomic, assign) CGFloat itemWidth;   //标尺item宽度
 @property (nonatomic, assign) BOOL setDefaultIndex;  //是否已经设置默认位置
@@ -19,7 +19,7 @@
 
 @end
 
-@implementation DLStepSlider
+@implementation DLSlider
 
 - (instancetype)init
 {
@@ -96,14 +96,14 @@
     title.textAlignment = NSTextAlignmentCenter;
     title.numberOfLines = 2;
     
-    if ([self.delegate respondsToSelector:@selector(titleFontAtIndex:)]) {
-        title.font = [self.delegate titleFontAtIndex:index];
+    if ([self.delegate respondsToSelector:@selector(titleFontAtIndex: withMark:)]) {
+        title.font = [self.delegate titleFontAtIndex:index withMark:self.mark];
     }
-    if ([self.delegate respondsToSelector:@selector(titleColorAtIndex:)]) {
-        title.textColor = [self.delegate titleColorAtIndex:index];
+    if ([self.delegate respondsToSelector:@selector(titleColorAtIndex: withMark:)]) {
+        title.textColor = [self.delegate titleColorAtIndex:index withMark:self.mark];
     }
-    if ([self.delegate respondsToSelector:@selector(titleAtIndex:)]) {
-        title.text = [self.delegate titleAtIndex:index];
+    if ([self.delegate respondsToSelector:@selector(titleAtIndex: withMark:)]) {
+        title.text = [self.delegate titleAtIndex:index withMark:self.mark];
     }
     
     //左半线
@@ -132,15 +132,15 @@
     CGFloat signX = _itemWidth * (index + .5) - 6;
     CGFloat signY = (SCREEN_HEIGTH * .2 - 50) * .5 + 10;
     
-    if ([self.delegate respondsToSelector:@selector(willSelectItemWithIndex:)]) {
-        [self.delegate willSelectItemWithIndex:index];
+    if ([self.delegate respondsToSelector:@selector(willSelectItemWithIndex: withMark:)]) {
+        [self.delegate willSelectItemWithIndex:index withMark:self.mark];
     }
     
     [UIView animateWithDuration:.25 animations:^{
-        _sign.frame = CGRectMake(signX, signY, 20, 20);
+        self.sign.frame = CGRectMake(signX, signY, 20, 20);
     } completion:^(BOOL finished) {
-        if ([self.delegate respondsToSelector:@selector(didSelectItemWithIndex:)]) {
-            [self.delegate didSelectItemWithIndex:index];
+        if ([self.delegate respondsToSelector:@selector(didSelectItemWithIndex: withMark:)]) {
+            [self.delegate didSelectItemWithIndex:index withMark:self.mark];
         }
     }];
     
@@ -156,8 +156,8 @@
     //移动到另外一个item时，执行代理方法
     if (index != _currentIndex) {
         _currentIndex = index;
-        if ([self.delegate respondsToSelector:@selector(willSelectItemWithIndex:)]) {
-            [self.delegate willSelectItemWithIndex:_currentIndex];
+        if ([self.delegate respondsToSelector:@selector(willSelectItemWithIndex: withMark:)]) {
+            [self.delegate willSelectItemWithIndex:_currentIndex withMark:self.mark];
         }
     }
     
@@ -179,10 +179,10 @@
         CGFloat Y = (SCREEN_HEIGTH * .2 - 50) * .5 + 10;
         
         [UIView animateWithDuration:.25 animations:^{
-            _sign.frame = CGRectMake(X, Y, 20, 20);
+            self.sign.frame = CGRectMake(X, Y, 20, 20);
         } completion:^(BOOL finished) {
-            if ([self.delegate respondsToSelector:@selector(didSelectItemWithIndex:)]) {
-                [self.delegate didSelectItemWithIndex:_currentIndex];
+            if ([self.delegate respondsToSelector:@selector(didSelectItemWithIndex: withMark:)]) {
+                [self.delegate didSelectItemWithIndex:self.currentIndex withMark:self.mark];
             }
         }];
     }
@@ -191,14 +191,6 @@
 - (void)setDefaultIndex:(NSInteger )defaultIndex {
     _defaultIndex = defaultIndex;
     _setDefaultIndex = YES;  //防止在设置defaultIndex为0时，影响设置默认值，所以改用此BOOL值来判断设置默认值。
-}
-
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    /*
-     因为我在写demo的时候是用上个控制器的touchesBegan来modal出此控制器。而在点击标尺的item时，点击事件会传递到上个控制器的touchesBegan中，会重复present控制器而报下面这个错误。
-     Attempt to present <DLStepSlider: ****>  on <ViewController: ****> which is already presenting <DLStepSlider: ****>
-     空写touchesBegan方法，只是为了将响应截在此处。
-     */
 }
 
 - (void)dismissVc {
