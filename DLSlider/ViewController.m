@@ -91,6 +91,7 @@
     }
 }
 
+//滑尺每个item的名字
 - (NSString *)titleAtIndex:(NSInteger)index withMark:(NSInteger)mark{
     switch (mark) {
         case 101:
@@ -105,7 +106,7 @@
     }
 }
 
-//滑尺没个item的名字
+//滑尺每个item的字体
 - (UIFont *)titleFontAtIndex:(NSInteger)index withMark:(NSInteger)mark{
     switch (mark) {
         case 101:
@@ -120,6 +121,7 @@
     }
 }
 
+//滑尺每个item的颜色
 - (UIColor *)titleColorAtIndex:(NSInteger)index withMark:(NSInteger)mark{
     switch (mark) {
         case 101:
